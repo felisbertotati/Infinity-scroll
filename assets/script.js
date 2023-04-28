@@ -2,26 +2,63 @@
 const imageContainer = document.getElementById("image-container");
 const loader = document.getElementById("loader");
 
+let ready = false;
+let imagesLoaded = 0;
+let totalImages = 0;
+
 let photosArray = [];
 
-const count = 10;
-const apiKey = "XjH1BNtLqY5aFKqD_wj0CSp5kikN6_IdGF8R5fhO3fk";
+let count = 5;
+const apiKey = "Your_API_Key";
 const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${count}`;
+
+// check if all images were load
+function imageLoaded() {
+  console.log("image loaded");
+  imagesLoaded++;
+  console.log("imagesLoaded");
+  if (imagesLoaded === totalImages) {
+    ready = true;
+    loader.hidden = true;
+    count = 30;
+  }
+}
+
+//helper function to set attributes on DOM elements
+
+function setAttribute(elemnet, attributes) {
+  for (const key in attributes) {
+    elemnet.setAttribute(key, attributes[key]);
+  }
+}
 
 //Create Elements for links & Photos, Add to Dom
 
 function displayPhotos() {
+  imagesLoaded = 0;
+  totalImages = photosArray.length;
+  console.log("total images", totalImages);
   //run function for each object in photoArray
   photosArray.forEach((photo) => {
     // create <a> to link to unsplash
     const item = document.createElement("a");
-    item.setAttribute("href", photo.links.html);
-    item.setAttribute("target", "_blank");
+
     //create <img> for photo
+    setAttribute(item, {
+      href: photo.links.html,
+      target: "_blank",
+    });
     const img = document.createElement("img");
-    img.setAttribute("src", photo.urls.regular);
-    img.setAttribute("alt", photo.alt_decription);
-    img.setAttribute("title", photo.alt_description);
+
+    setAttribute(img, {
+      src: photo.urls.regular,
+      alt: photo.alt_description,
+      title: photo.alt_description,
+    });
+
+    //Event listener, check when each is finished loading
+    img.addEventListener("load", imageLoaded);
+
     // Put <img> inside <a>, then put both inside imageContainer Element
     item.appendChild(img);
     imageContainer.appendChild(item);
@@ -39,6 +76,18 @@ async function getPhotos() {
     //catch error here
   }
 }
+
+// Check to see if scrolling near bottom of page, load more photos
+
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 &&
+    ready
+  ) {
+    ready = false;
+    getPhotos();
+  }
+});
 
 //on load
 getPhotos();
