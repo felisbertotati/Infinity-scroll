@@ -4,6 +4,8 @@
 
 ## Description:
 
+This project involves implementing an infinity scroll feature using the Unsplash API to display an endless stream of high-quality images. The user can seamlessly scroll through the images and view an unlimited number of photographs.
+
 
 ## Table of Contents
 
@@ -23,9 +25,8 @@
 
 You can visit my portfolio clicking the link:
 
-https://felisbertotati.github.io/quote-generator/
 
-![image]()
+![image](https://github.com/felisbertotati/Infinity-scroll/blob/main/assets/images/screenshot.png?raw=true)
 
 ## License
 
